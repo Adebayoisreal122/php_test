@@ -2,17 +2,17 @@
 session_start();
 require 'projectConnect.php';
 
-// Check if the student is logged in
+
 if (!isset($_SESSION['stud_id'])) {
     header('Location: studentsignin.php');
     exit();
 }
 
-// Get the logged-in student's ID
 $student_id = $_SESSION['stud_id'];
 
-// Query to retrieve only the student's details
-$query = "SELECT * FROM `students_table` WHERE student_id = ?";
+
+
+$query = "SELECT  students_table.student_id, students_table.firstName  AS student_firstName,  students_table.lastName AS student_lastname, students_table.email AS student_email, supervisors_table.firstName AS supervisor_firstName,  supervisors_table.supervisor_id AS super_id, supervisors_table.lastName AS supervisor_lastName FROM `students_table` JOIN `supervisors_table` ON students_table.supervisor_id= supervisors_table.supervisor_id WHERE student_id = ?";
 $prepare = $connection->prepare($query);
 $prepare->bind_param("i", $student_id);
 $prepare->execute();
@@ -37,20 +37,30 @@ $student = $result->fetch_assoc();
     <table class="table shadow table-bordered">
         <tr>
             <th>First Name</th>
-            <td><?php echo htmlspecialchars($student['firstName']); ?></td>
+            <td>
+                <?php
+                 echo htmlspecialchars($student['student_firstName']); 
+                ?>
+        </td>
         </tr>
         <tr>
             <th>Last Name</th>
-            <td><?php echo htmlspecialchars($student['lastName']); ?></td>
+            <td><?php echo htmlspecialchars($student['student_lastname']); ?></td>
         </tr>
         <tr>
             <th>Email</th>
-            <td><?php echo htmlspecialchars($student['email']); ?></td>
+            <td><?php echo htmlspecialchars($student['student_email']); ?></td>
         </tr>
 
         <tr>
             <th>Supervisor ID</th>
-            <td><?php echo htmlspecialchars($student['supervisor_id']); ?></td>
+            <td><?php echo htmlspecialchars($student['super_id']); ?></td>
+        </tr>
+
+        <tr>
+            <th>Supervisor Name</th>
+            <td><?php echo htmlspecialchars($student['supervisor_firstName']) . ' ' . htmlspecialchars($student['supervisor_lastName']); ?></td>
+
         </tr>
     </table>
 </div>

@@ -171,7 +171,7 @@ if (isset($_POST['submit'])) {
     $lname = $_POST['lastName'];
     $email = $_POST['email'];
     $password = $_POST['password'];
-    $supervisor_id = 2;
+    $supervisor_id = 3;
     
 
     $query = "SELECT * FROM `students_table` WHERE email = ?";
